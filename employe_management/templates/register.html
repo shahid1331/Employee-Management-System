@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+
+  <div style="max-width:380px; width:100%;">
+    <div class="card shadow p-3" style="max-width:380px; margin:auto; font-size:0.95rem;">
+      
+      <h5 class="text-center mb-2">Register</h5>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Full Name -->
+        <div class="mb-2">
+          <label class="form-label">Full Name</label>
+          {% render_field form.full_name class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Email -->
+        <div class="mb-2">
+          <label class="form-label">Email</label>
+          {% render_field form.email class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Username -->
+        <div class="mb-2">
+          <label class="form-label">Username</label>
+          {% render_field form.username class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Department -->
+        <div class="mb-2">
+          <label class="form-label">Department</label>
+          {% render_field form.department class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Phone -->
+        <div class="mb-2">
+          <label class="form-label">Phone</label>
+          {% render_field form.phone class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Password -->
+        <div class="mb-2">
+          <label class="form-label">Password</label>
+          {% render_field form.password1 class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-2">
+          <label class="form-label">Confirm Password</label>
+          {% render_field form.password2 class="form-control form-control-sm" %}
+        </div>
+
+        <!-- Correct submit button -->
+        <button type="submit" class="btn btn-primary btn-sm w-100">
+          Create Account
+        </button>
+
+      </form>
+
+      <p class="mt-2 text-center small">
+        Already have an account?
+        <a href="{% url 'my_admin:login' %}">Login here</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

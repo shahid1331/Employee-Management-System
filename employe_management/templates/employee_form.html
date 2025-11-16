@@ -1,0 +1,63 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<div class="container py-4" style="max-width:800px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="card-title mb-3">{{ title }}</h4>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Employee ID</label>
+            {{ form.emp_id }}
+            {% if form.emp_id.errors %}<div class="text-danger small">{{ form.emp_id.errors }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}<div class="text-danger small">{{ form.username.errors }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Full name</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}<div class="text-danger small">{{ form.full_name.errors }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div class="text-danger small">{{ form.phone.errors }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Department</label>
+            {{ form.department }}
+            {% if form.department.errors %}<div class="text-danger small">{{ form.department.errors }}</div>{% endif %}
+          </div>
+
+          <div class="col-md-6 d-flex align-items-center">
+            <div class="form-check">
+              {{ form.working_status }}
+              <label class="form-check-label ms-2">Working (checked = active)</label>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="{% url 'my_admin:employee-list' %}" class="btn btn-secondary ms-2">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Confirm Delete</h5>
+      <p>Are you sure you want to delete employee <strong>{{ employee.full_name }}</strong> ({{ employee.emp_id }})?</p>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, delete</button>
+        <a href="{% url 'my_admin:employee-list' %}" class="btn btn-secondary ms-2">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

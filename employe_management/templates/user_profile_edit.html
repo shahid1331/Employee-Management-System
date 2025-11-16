@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load widget_tweaks static %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm p-3">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Edit Profile</h4>
+        </div>
+
+        {# show form non-field errors (e.g. validation from clean()) #}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ form.non_field_errors|join:", " }}
+          </div>
+        {% endif %}
+
+        <!-- image preview -->
+        <div class="text-center mb-3">
+          {% if employee and employee.image %}
+            <img id="previewImage" src="{{ employee.image.url }}" alt="Profile" style="width:140px; height:140px; object-fit:cover; border-radius:8px;">
+          {% else %}
+            <img id="previewImage" src="{% static 'img/default-avatar.png' %}" alt="Profile" style="width:140px; height:140px; object-fit:cover; border-radius:8px;">
+          {% endif %}
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Image upload -->
+          <div class="mb-3">
+            <label class="form-label">Image</label>
+            {# ensure id for JS preview #}
+            {% render_field form.image class="form-control" id="id_image" %}
+            {% if form.image.errors %}<div class="text-danger small">{{ form.image.errors|join:", " }}</div>{% endif %}
+            <div class="form-text small">Allowed: jpg, png. Max size depends on server config.</div>
+          </div>
+
+          <!-- Name -->
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            {% render_field form.full_name class="form-control" %}
+            {% if form.full_name.errors %}<div class="text-danger small">{{ form.full_name.errors|join:", " }}</div>{% endif %}
+          </div>
+
+          <!-- Job title (optional) -->
+          {% if form.job_title %}
+          <div class="mb-3">
+            <label class="form-label">Job title</label>
+            {% render_field form.job_title class="form-control" %}
+            {% if form.job_title.errors %}<div class="text-danger small">{{ form.job_title.errors|join:", " }}</div>{% endif %}
+          </div>
+          {% endif %}
+
+          <!-- Department -->
+          <div class="mb-3">
+            <label class="form-label">Department</label>
+            {% render_field form.department class="form-control" %}
+            {% if form.department.errors %}<div class="text-danger small">{{ form.department.errors|join:", " }}</div>{% endif %}
+          </div>
+
+          <!-- Birthday (optional) -->
+          {% if form.birthday %}
+          <div class="mb-3">
+            <label class="form-label">Birthday</label>
+            {% render_field form.birthday class="form-control" %}
+            {% if form.birthday.errors %}<div class="text-danger small">{{ form.birthday.errors|join:", " }}</div>{% endif %}
+          </div>
+          {% endif %}
+
+          <!-- Joining date (optional) -->
+          {% if form.joining_date %}
+          <div class="mb-3">
+            <label class="form-label">Joining date</label>
+            {% render_field form.joining_date class="form-control" %}
+            {% if form.joining_date.errors %}<div class="text-danger small">{{ form.joining_date.errors|join:", " }}</div>{% endif %}
+          </div>
+          {% endif %}
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            {% render_field form.email class="form-control" %}
+            {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors|join:", " }}</div>{% endif %}
+          </div>
+
+          <!-- Phone -->
+          <div class="mb-3">
+            <label class="form-label">Number</label>
+            {% render_field form.phone class="form-control" %}
+            {% if form.phone.errors %}<div class="text-danger small">{{ form.phone.errors|join:", " }}</div>{% endif %}
+          </div>
+
+          <!-- Address (optional) -->
+          {% if form.address %}
+          <div class="mb-3">
+            <label class="form-label">Address</label>
+            {% render_field form.address class="form-control" %}
+            {% if form.address.errors %}<div class="text-danger small">{{ form.address.errors|join:", " }}</div>{% endif %}
+          </div>
+          {% endif %}
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a class="btn btn-outline-secondary" href="{% url 'user:profile' %}">Cancel</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- image preview JS -->
+<script>
+  (function(){
+    const fileInput = document.getElementById('id_image');
+    const preview = document.getElementById('previewImage');
+    if (!fileInput || !preview) return;
+    fileInput.addEventListener('change', function(e){
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Please choose an image file.');
+        fileInput.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        preview.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  })();
+</script>
+{% endblock %}

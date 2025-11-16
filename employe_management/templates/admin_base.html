@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Admin | EMS{% endblock %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --sidebar-width: 250px;
+      --header-height: 64px; /* explicit header height */
+      --sidebar-bg: #222;
+      --header-bg: #000;
+      --muted: #6c757d;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /* fixed header */
+    header.site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: var(--header-bg);
+      color: #fff;
+      z-index: 1040;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* body content is pushed down so header doesn't overlap */
+    body > .page-wrapper, .main-content {
+      padding-top: var(--header-height);
+    }
+
+    /* fixed sidebar below header */
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      color: #fff;
+      padding-top: 18px;
+      overflow: auto;
+      z-index: 1030;
+    }
+
+    .sidebar a {
+      color: #ddd;
+      padding: 12px 20px;
+      display: block;
+      text-decoration: none;
+      font-size: 15px;
+    }
+    .sidebar a:hover { background: #333; color: #fff; }
+    .sidebar a.active { background: #444; color: #fff; }
+
+    /* main content area; margin-left equals sidebar width */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding: 20px;
+      min-height: calc(100vh - var(--header-height));
+      background: #f8f9fa;
+    }
+
+    footer.site-footer {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 10px 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* small screens: sidebar collapses to top, main content margin-left removed */
+    @media (max-width: 991px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        top: 0;
+        height: auto;
+        padding: 10px 0;
+      }
+      .main-content {
+        margin-left: 0;
+        padding-top: 12px;
+      }
+      body > .page-wrapper, .main-content { padding-top: 0; } /* header can be inline on small screens */
+      header.site-header { position: relative; height: auto; padding: 10px 16px; }
+    }
+
+    /* header brand + logout small tweaks */
+    .site-brand { font-weight: 700; letter-spacing: .2px; color: #fff; text-decoration: none; }
+    .top-actions .btn-logout { background: #d9534f; border-color: #d43f3a; color: #fff; }
+    .top-actions .btn-logout:hover { opacity: 0.95; }
+  </style>
+</head>
+<body>
+  <!-- fixed header -->
+  <header class="site-header">
+    <div class="d-flex align-items-center gap-3">
+      <a class="site-brand" href="{% url 'my_admin:admin-dashboard' %}">EMS Admin</a>
+    </div>
+
+    <div class="top-actions d-flex align-items-center gap-2">
+      <a href="{% url 'my_admin:logout' %}" class="btn btn-sm btn-logout">Logout</a>
+    </div>
+  </header>
+
+  <div class="page-wrapper">
+    <!-- sidebar -->
+    <nav class="sidebar" aria-label="Sidebar navigation">
+      <a href="{% url 'my_admin:admin-dashboard' %}" class="{% if request.resolver_match.url_name == 'admin-dashboard' or request.path == '/' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'my_admin:employee-list' %}" class="{% if request.resolver_match.url_name == 'employee-list' %}active{% endif %}">Employees</a>
+      <a href="#">Departments</a>
+      <a href="#">Reports</a>
+    </nav>
+
+    <!-- main content -->
+    <main class="main-content">
+      {% block content %}
+      {% endblock %}
+      <footer class="site-footer mt-4">
+        © {{ now|date:"Y" }} Employee Management System — Admin Panel
+      </footer>
+    </main>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="row g-0">
+      <!-- Left: image -->
+      <div class="col-md-4 text-center p-4">
+        {% if object and object.image %}
+          <img src="{{ object.image.url }}" alt="Profile photo"
+               class="img-fluid rounded" style="max-width:200px; height:200px; object-fit:cover;">
+        {% else %}
+          <img src="{% static 'img/default-avatar.png' %}" alt="Default avatar"
+               class="img-fluid rounded" style="max-width:200px; height:200px; object-fit:cover;">
+        {% endif %}
+      </div>
+
+      <!-- Right: details -->
+      <div class="col-md-8">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h3 class="card-title mb-1">{{ object.full_name|default:request.user.username }}</h3>
+              <p class="text-muted mb-1">{{ object.department|default:"No Department" }}</p>
+              <p class="mb-0"><small class="text-muted">Employee ID: <strong>{{ object.id }}</strong></small></p>
+            </div>
+
+            <div class="text-end">
+              <a href="{% url 'user:profile_edit' %}" class="btn btn-sm btn-primary">Edit profile</a>
+              <a href="{% url 'my_admin:dashboard' %}" class="btn btn-sm btn-outline-secondary ms-2">Dashboard</a>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-sm-6 mb-2">
+              <strong>Email</strong>
+              <div>{{ object.email|default:"-" }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Phone</strong>
+              <div>{{ object.phone|default:"-" }}</div>
+            </div>
+
+            <!-- add other fields if present -->
+            <div class="col-sm-6 mb-2">
+              <strong>Joined</strong>
+              <div>{{ object.created_at|default:"-" }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Location</strong>
+              <div>{{ object.location|default:"-" }}</div>
+            </div>
+
+            <div class="col-12 mt-3">
+              <strong>About</strong>
+              <p class="text-muted">{{ object.bio|default:"No bio provided." }}</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
